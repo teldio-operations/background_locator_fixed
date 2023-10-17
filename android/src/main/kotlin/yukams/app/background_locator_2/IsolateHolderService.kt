@@ -96,8 +96,12 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
         val notification = getNotification()
         startForeground(notificationId, notification)
 
-        pluggables.forEach {
-            context?.let { it1 -> it.onServiceStart(it1) }
+        context?.let {
+            Handler(it.mainLooper)
+                .postDelayed(
+                    { pluggables.forEach { context?.let { it1 -> it.onServiceStart(it1) } } },
+                    1000
+                )
         }
     }
 
